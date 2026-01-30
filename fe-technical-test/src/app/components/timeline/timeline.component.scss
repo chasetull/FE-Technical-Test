@@ -59,89 +59,172 @@
 /* Timeline Area */
 /* .timeline-grid width set dynamically in template */
 
+/* Timeline Area */
 .date-header {
     height: 50px;
-    background: #f8f9fa;
+    background: white;
+    /* Clean white */
     position: sticky;
     top: 0;
     z-index: 5;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .date-cell {
     flex-shrink: 0;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 500;
     line-height: 50px;
-    color: #6c757d;
+    color: #868e96;
+    /* Muted grey */
+    border-right: 1px solid #f8f9fa;
+    /* Subtle vertical dividers */
 
     &.weekend {
-        background-color: #f8f9fa;
-        /* Slightly darker or same as header */
+        background-color: transparent;
+        /* No background change in design */
     }
 
     &.today-header {
-        color: #0d6efd;
-        font-weight: bold;
-        border-bottom: 2px solid #0d6efd;
+        color: #6610f2;
+        /* Position styling for "Current XXX" tag is handled in HTML/CSS overlay if needed,
+           or we rely on the line. For now, we highlight text.*/
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #6610f2;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
     }
 }
 
 .grid-row {
     height: 60px;
-    /* Match sidebar row height */
+    position: relative;
 
     &:hover .grid-lines {
-        background-color: rgba(0, 0, 0, 0.02);
+        background-color: transparent;
+    }
+
+    /* Phantom Bar on Hover (handled by hover-bg element, but we can do a simple row highlight) */
+    &:hover {
+        background-color: #fafafa;
     }
 }
 
 .grid-line {
     flex-shrink: 0;
+    border-right: 1px solid #f8f9fa;
 
     &.weekend-bg {
-        background-color: #fafafa;
+        background-color: #fcfcfc;
+        /* Ultra subtle weekend shift */
     }
 
     &.today-line {
-        background-color: rgba(13, 110, 253, 0.05);
-        border-right: 1px solid #0d6efd !important;
-        /* Today indicator line */
+        background-color: transparent;
+        border-right: 2px solid #6610f2 !important;
+        /* Strong purple line */
+        z-index: 2;
+        position: relative;
+
+        /* Optional: Add "Current" tag at top of first row? 
+           Hard to do in repeated grid. 
+           We'll stick to the strong line for now. */
     }
 }
 
 /* Work Order Bars */
 .work-order-bar {
-    height: 40px;
-    top: 10px;
-    /* Center in 60px row */
-    line-height: 40px;
+    height: 48px;
+    top: 6px;
+    /* Centered in 60px row */
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    font-weight: 500;
+    color: #333;
+    /* Darker text for contrast on light bg */
+    border: 1px solid transparent;
+    /* Prepare for hover border */
 
     &:hover {
-        filter: brightness(0.95);
         transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        z-index: 10;
     }
+
+    /* Status background for the whole bar */
 
     &.status-open {
-        background-color: #0d6efd;
+        background-color: #f0f7ff;
+        /* Very light blue */
+        border-color: #cce5ff;
+        color: #004085;
+
+        .status-pill {
+            background-color: #cce5ff;
+            color: #004085;
+        }
     }
 
-    /* Blue */
     &.status-in-progress {
-        background-color: #6610f2;
+        background-color: #f3f0ff;
+        /* Light purple */
+        border-color: #d0bfff;
+        color: #59359a;
+
+        .status-pill {
+            background-color: #e0d4fc;
+            color: #59359a;
+        }
     }
 
-    /* Purple */
     &.status-complete {
-        background-color: #198754;
+        background-color: #e6f8f0;
+        /* Light green */
+        border-color: #b3e6cc;
+        color: #0f5132;
+
+        .status-pill {
+            background-color: #b3e6cc;
+            color: #0f5132;
+        }
     }
 
-    /* Green */
     &.status-blocked {
-        background-color: #ffc107;
-        color: #000 !important;
-    }
+        background-color: #fff9e6;
+        /* Light yellow */
+        border-color: #ffeeba;
+        color: #856404 !important;
 
-    /* Yellow */
+        .status-pill {
+            background-color: #ffeeba;
+            color: #856404;
+        }
+    }
+}
+
+/* Internal Status Pill */
+.status-pill {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }

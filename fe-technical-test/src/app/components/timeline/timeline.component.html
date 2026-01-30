@@ -1,16 +1,26 @@
 <div class="timeline-container">
     <!-- Controls -->
-    <div class="timeline-header-controls p-3 d-flex justify-content-between align-items-center bg-white border-bottom">
-        <div class="column">
-            <h4 class="m-0">Work Orders</h4>
-            <div class="d-flex align-items-center">
-                <label class="me-2">Timescale:</label>
-                <ng-select [items]="zoomOptions" bindLabel="label" bindValue="value" [(ngModel)]="zoomLevel"
-                    (change)="onZoomChange()" [clearable]="false" class="zoom-select">
-                </ng-select>
-            </div>
+    <!-- Controls -->
+    <div class="timeline-header-controls px-4 py-3 d-flex flex-column bg-white border-bottom">
+        <div class="brand mb-4">
+            <span style="font-weight: 900; color: #59359a; font-size: 0.9rem; letter-spacing: 1px;">NAOLOGIC</span>
         </div>
 
+        <div class="d-flex justify-content-between align-items-end">
+            <div class="column">
+                <h2 class="m-0 fw-bold text-dark">Work Orders</h2>
+
+                <div class="d-flex align-items-center">
+                    <div class="bg-light rounded-pill px-2 py-1 d-flex align-items-center border">
+                        <span class="text-muted small ms-2 me-2 fw-bold">Timescale</span>
+                        <ng-select [items]="zoomOptions" bindLabel="label" bindValue="value" [(ngModel)]="zoomLevel"
+                            (change)="onZoomChange()" [clearable]="false" class="zoom-select-pill">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <div class="timeline-body d-flex">
@@ -36,7 +46,8 @@
 
                 <!-- Rows -->
                 <div class="grid-row border-bottom position-relative" *ngFor="let center of workCenters"
-                    (click)="onGridClick($event, center)">
+                    (click)="onGridClick($event, center)" (mousemove)="onGridMouseMove($event, center.docId)"
+                    (mouseleave)="onGridMouseLeave()">
                     <!-- Grid vertical lines (background) -->
                     <div class="grid-lines d-flex h-100 position-absolute w-100" style="z-index: 0;">
                         <div class="grid-line border-end h-100" *ngFor="let date of dates"
@@ -45,16 +56,31 @@
                         </div>
                     </div>
 
+                    <!-- Phantom Bar (Hover) -->
+                    <div class="phantom-layer position-absolute w-100 h-100" style="z-index: 0; pointer-events: none;"
+                        *ngIf="hoveredCenterId === center.docId">
+                        <div class="phantom-bar position-absolute rounded" [style.left]="hoveredLeft"
+                            [style.width.px]="getColumnWidth()"
+                            style="height: 40px; top: 10px; background-color: rgba(102, 16, 242, 0.1); border: 1px dashed #6610f2;">
+                            <div class="tooltip-text small text-dark bg-white border rounded px-2 py-1 shadow-sm position-absolute"
+                                style="top: -30px; left: 0; white-space: nowrap;">
+                                Click to add
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Work Order Bars -->
                     <div class="orders-layer position-absolute w-100 h-100" style="z-index: 1;">
-                        <div class="work-order-bar position-absolute rounded px-2 text-white small overflow-hidden text-truncate shadow-sm"
+                        <div class="work-order-bar position-absolute small overflow-hidden shadow-sm"
                             *ngFor="let order of getWorkOrdersForCenter(center.docId)" [ngStyle]="getBarPosition(order)"
                             [class.status-open]="order.data.status === 'open'"
                             [class.status-in-progress]="order.data.status === 'in-progress'"
                             [class.status-complete]="order.data.status === 'complete'"
                             [class.status-blocked]="order.data.status === 'blocked'"
                             (click)="onOrderClick($event, order)">
-                            {{ order.data.name }}
+
+                            <span class="text-truncate fw-bold">{{ order.data.name }}</span>
+                            <span class="status-pill ms-2">{{ order.data.status }}</span>
                         </div>
                     </div>
                 </div>

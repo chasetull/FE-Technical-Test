@@ -47,6 +47,16 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   startX = 0;
   scrollLeft = 0;
 
+  // Drag to Scroll State
+  // isDragging = false;
+  // startX = 0;
+  // scrollLeft = 0;
+
+  // Hover State for Phantom Bar
+  hoveredCenterId: string | null = null;
+  hoveredDate: Date | null = null;
+  hoveredLeft: string = '0px';
+
   constructor(private scheduleService: ScheduleService) { }
 
   ngOnInit(): void {
@@ -301,6 +311,32 @@ export class TimelineComponent implements OnInit, AfterViewInit {
 
   onPanelClose() {
     this.panelOpen = false;
+  }
+
+  onGridMouseMove(event: MouseEvent, centerId: string) {
+    if (this.isDragging) {
+      this.hoveredCenterId = null;
+      return;
+    }
+
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+
+    // Snap to day/hour
+    const width = this.getColumnWidth();
+    const colIndex = Math.floor(x / width);
+    const snapX = colIndex * width;
+
+    this.hoveredCenterId = centerId;
+    this.hoveredLeft = `${snapX}px`;
+
+    // Optional: Calculate date for tooltip?
+    // For now just showing the visual bar
+  }
+
+  onGridMouseLeave() {
+    this.hoveredCenterId = null;
   }
 
   onPanelSave(order: WorkOrderDocument) {

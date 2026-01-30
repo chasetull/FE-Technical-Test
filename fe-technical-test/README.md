@@ -4,7 +4,7 @@ A visual Work Order Schedule Timeline built with Angular 17+, ng-bootstrap, and 
 
 ## Features
 
-- **Timeline Visualization**: View work orders across multiple work centers with Day, Week, and Month zoom levels.
+- **Timeline Visualization**: View work orders across multiple work centers with Hour, Day, Week, and Month zoom levels.
 - **Interactive Management**: 
     - Click on the grid to **Create** a new work order.
     - Click on a work order bar to **Edit** or **Delete** it.
