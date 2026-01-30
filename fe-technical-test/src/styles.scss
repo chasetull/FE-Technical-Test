@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "bootstrap/scss/bootstrap";
+
+/* Importing ng-select themes */
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+/* Global Font Family */
+body {
+    font-family: "Circular-Std", sans-serif;
+}
+

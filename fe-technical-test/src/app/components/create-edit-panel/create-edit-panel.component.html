@@ -1,0 +1,65 @@
+<div class="panel-backdrop" *ngIf="isOpen" (click)="close.emit()"></div>
+
+<div class="panel-container" [class.open]="isOpen">
+    <div class="panel-header p-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="m-0">{{ mode === 'create' ? 'Create Work Order' : 'Work Order Details' }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="close.emit()"></button>
+    </div>
+
+    <div class="panel-body p-3 overflow-auto" [formGroup]="form">
+        <div class="alert alert-danger" *ngIf="errorMsg">
+            {{ errorMsg }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Work Order Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Enter name">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Work Center <span class="text-danger">*</span></label>
+            <ng-select [items]="workCenters" bindLabel="data.name" bindValue="docId" formControlName="workCenterId"
+                placeholder="Select work center">
+            </ng-select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status <span class="text-danger">*</span></label>
+            <ng-select [items]="statusOptions" bindLabel="label" bindValue="value" formControlName="status"
+                [searchable]="false">
+            </ng-select>
+        </div>
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label class="form-label">Start Date <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dpStart" formControlName="startDate"
+                        ngbDatepicker #d1="ngbDatepicker">
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d1.toggle()"
+                        type="button">📅</button>
+                </div>
+            </div>
+
+            <div class="col-6 mb-3">
+                <label class="form-label">End Date <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input class="form-control" placeholder="yyyy-mm-dd" name="dpEnd" formControlName="endDate"
+                        ngbDatepicker #d2="ngbDatepicker">
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d2.toggle()"
+                        type="button">📅</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-footer p-3 border-top bg-light d-flex justify-content-between">
+        <button type="button" class="btn btn-danger" *ngIf="mode === 'edit'" (click)="onDelete()">Delete</button>
+        <div class="d-flex gap-2 ms-auto">
+            <button type="button" class="btn btn-outline-secondary" (click)="close.emit()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="form.invalid">
+                {{ mode === 'create' ? 'Create' : 'Save' }}
+            </button>
+        </div>
+    </div>
+</div>

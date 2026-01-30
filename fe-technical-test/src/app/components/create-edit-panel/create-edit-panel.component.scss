@@ -1,0 +1,40 @@
+.panel-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.panel-container {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    /* Hidden */
+    width: 400px;
+    height: 100vh;
+    background: white;
+    z-index: 101;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s ease-in-out;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+
+    &.open {
+        right: 0;
+    }
+}
+
+.panel-header {
+    height: 60px;
+}
+
+.panel-body {
+    flex: 1;
+}
+
+.panel-footer {
+    height: 70px;
+}

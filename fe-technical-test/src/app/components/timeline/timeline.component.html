@@ -1,0 +1,69 @@
+<div class="timeline-container">
+    <!-- Controls -->
+    <div class="timeline-header-controls p-3 d-flex justify-content-between align-items-center bg-white border-bottom">
+        <div class="column">
+            <h4 class="m-0">Work Orders</h4>
+            <div class="d-flex align-items-center">
+                <label class="me-2">Timescale:</label>
+                <ng-select [items]="zoomOptions" bindLabel="label" bindValue="value" [(ngModel)]="zoomLevel"
+                    (change)="onZoomChange()" [clearable]="false" class="zoom-select">
+                </ng-select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="timeline-body d-flex">
+        <!-- Left Sidebar: Work Centers -->
+        <div class="sidebar-centers border-end bg-light">
+            <div class="sidebar-header border-bottom">Work Center</div>
+            <div class="center-row border-bottom d-flex align-items-center px-3" *ngFor="let center of workCenters">
+                {{ center.data.name }}
+            </div>
+        </div>
+
+        <!-- Right Content: Grid -->
+        <div class="timeline-scroll-area flex-grow-1 overflow-auto" #scrollContainer>
+            <div class="timeline-grid" [style.width.px]="getContainerWidth()">
+                <!-- Date Header -->
+                <div class="date-header d-flex border-bottom">
+                    <div class="date-cell border-end text-center small" *ngFor="let date of dates"
+                        [style.width.px]="getColumnWidth()" [class.weekend]="isWeekend(date)"
+                        [class.today-header]="isToday(date)">
+                        {{ getDateLabel(date) }}
+                    </div>
+                </div>
+
+                <!-- Rows -->
+                <div class="grid-row border-bottom position-relative" *ngFor="let center of workCenters"
+                    (click)="onGridClick($event, center)">
+                    <!-- Grid vertical lines (background) -->
+                    <div class="grid-lines d-flex h-100 position-absolute w-100" style="z-index: 0;">
+                        <div class="grid-line border-end h-100" *ngFor="let date of dates"
+                            [style.width.px]="getColumnWidth()" [class.weekend-bg]="isWeekend(date)"
+                            [class.today-line]="isToday(date)">
+                        </div>
+                    </div>
+
+                    <!-- Work Order Bars -->
+                    <div class="orders-layer position-absolute w-100 h-100" style="z-index: 1;">
+                        <div class="work-order-bar position-absolute rounded px-2 text-white small overflow-hidden text-truncate shadow-sm"
+                            *ngFor="let order of getWorkOrdersForCenter(center.docId)" [ngStyle]="getBarPosition(order)"
+                            [class.status-open]="order.data.status === 'open'"
+                            [class.status-in-progress]="order.data.status === 'in-progress'"
+                            [class.status-complete]="order.data.status === 'complete'"
+                            [class.status-blocked]="order.data.status === 'blocked'"
+                            (click)="onOrderClick($event, order)">
+                            {{ order.data.name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-create-edit-panel [isOpen]="panelOpen" [mode]="panelMode" [workOrder]="selectedOrder"
+        [workCenters]="workCenters" [initialDate]="clickedDate" (close)="onPanelClose()" (save)="onPanelSave($event)"
+        (delete)="onPanelDelete($event)">
+    </app-create-edit-panel>
+</div>

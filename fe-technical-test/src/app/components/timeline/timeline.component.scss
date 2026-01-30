@@ -1,0 +1,147 @@
+.timeline-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.zoom-select {
+    width: 150px;
+}
+
+.timeline-body {
+    flex: 1;
+    overflow: hidden;
+    /* Contains scroll area */
+}
+
+.timeline-scroll-area {
+    cursor: grab;
+    overscroll-behavior-x: none;
+    overscroll-behavior: none;
+    /* Safer fallback */
+
+    &.active {
+        cursor: grabbing;
+        user-select: none;
+        /* Prevent text selection while dragging */
+    }
+}
+
+/* Sidebar */
+.sidebar-centers {
+    width: 250px;
+    flex-shrink: 0;
+    z-index: 10;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+
+    .sidebar-header {
+        height: 50px;
+        /* Match date header height */
+        display: flex;
+        align-items: center;
+        padding-left: 1rem;
+        font-weight: bold;
+        background: #f8f9fa;
+    }
+
+    .center-row {
+        height: 60px;
+        /* Row height */
+        background: white;
+
+        &:hover {
+            background: #f1f3f5;
+        }
+    }
+}
+
+/* Timeline Area */
+/* .timeline-grid width set dynamically in template */
+
+.date-header {
+    height: 50px;
+    background: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.date-cell {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    line-height: 50px;
+    color: #6c757d;
+
+    &.weekend {
+        background-color: #f8f9fa;
+        /* Slightly darker or same as header */
+    }
+
+    &.today-header {
+        color: #0d6efd;
+        font-weight: bold;
+        border-bottom: 2px solid #0d6efd;
+    }
+}
+
+.grid-row {
+    height: 60px;
+    /* Match sidebar row height */
+
+    &:hover .grid-lines {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+}
+
+.grid-line {
+    flex-shrink: 0;
+
+    &.weekend-bg {
+        background-color: #fafafa;
+    }
+
+    &.today-line {
+        background-color: rgba(13, 110, 253, 0.05);
+        border-right: 1px solid #0d6efd !important;
+        /* Today indicator line */
+    }
+}
+
+/* Work Order Bars */
+.work-order-bar {
+    height: 40px;
+    top: 10px;
+    /* Center in 60px row */
+    line-height: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        filter: brightness(0.95);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    &.status-open {
+        background-color: #0d6efd;
+    }
+
+    /* Blue */
+    &.status-in-progress {
+        background-color: #6610f2;
+    }
+
+    /* Purple */
+    &.status-complete {
+        background-color: #198754;
+    }
+
+    /* Green */
+    &.status-blocked {
+        background-color: #ffc107;
+        color: #000 !important;
+    }
+
+    /* Yellow */
+}
